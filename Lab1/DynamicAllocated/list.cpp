@@ -56,28 +56,8 @@ class LinkedList{
             node2->val = temp;
         }
 
-        void bubbleSort(){
-            printf("size: %d\n", getSize());
-            Node *auxPrimary   = head;
-            Node *auxSecondary = head->next;
-            int size = getSize();
-
-            for (int i = 0; i < size - 1; i++){
-                auxPrimary = head;
-                auxSecondary = head->next;
-                for (int j = 0; j < size - i - 1; j++){
-                    if (auxPrimary->val > auxSecondary->val){
-                        swap(auxPrimary, auxSecondary);
-                    }
-                    auxPrimary = auxSecondary;
-                    auxSecondary = auxSecondary->next;
-                }
-            }
-        }
-
         // Recursive Faster Bubble Sort
-        void recursiveFasterBubbleSort(Node *auxPrimary, Node *auxSecondary, int pos){
-            printf("------------------------\n");
+        void bubbleSort(Node *auxPrimary, Node *auxSecondary, int pos, char seeList){
             // if the array is empty or has only one element, it is sorted
             if (pos == 1){ return; }
 
@@ -91,7 +71,6 @@ class LinkedList{
                 if (auxPrimary->val > auxSecondary->val){
                     swap(auxPrimary, auxSecondary);
                     swapped = true;
-                    print();
                 }
                 auxPrimary   = auxSecondary;
                 auxSecondary = auxSecondary->next;
@@ -107,7 +86,12 @@ class LinkedList{
             auxPrimary   = head;
             auxSecondary = head->next;
 
+            if (seeList == 'y'){
+                cout << "---- Iteration " << getSize() - pos + 1 << " ----" << endl;
+                print();
+            }
+
             // sort the remaining array
-            recursiveFasterBubbleSort(auxPrimary, auxSecondary, newSize);
+            bubbleSort(auxPrimary, auxSecondary, newSize, seeList);
         }
 };
