@@ -6,6 +6,8 @@
 
 using namespace std;
 
+void zeroSizeListError();
+
 int main(int argc, char *argv[]){
     char seeList, seeTime;
 
@@ -50,7 +52,7 @@ int main(int argc, char *argv[]){
             }
         }
         if (list->getSize() == 0){
-            cout << "How do you expect me to sort a list of size zero?" << endl;
+            zeroSizeListError();
             return 0;
         }
     } else {
@@ -86,3 +88,60 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
+// I know this is a bit stupid, but i was bored
+void zeroSizeListError(){
+    int error = rand() % 10;
+    cout << endl;
+    switch (error){
+        case 0:
+            cout << "Error: Sorting a zero-sized list is like trying to find love on a deserted island. Sure, you might think you have a chance at first, but as time goes on, you'll realize that you're just talking to yourself and the only thing you're going to end up with is a lonely segmentation fault. So please, add some elements to your list and find love elsewhere." << endl;
+            break;
+        case 1:
+            cout << "Uh oh, it looks like your list has gone on a diet and is now zero-sized! Are you sure it's getting enough bytes to eat? Please feed it some data before attempting to sort." << endl;
+            break;
+        case 2:
+            cout << "Warning: Sorting a zero-sized list is like trying to organize a party for no one. Eventually, you'll realize you're just talking to yourself and end up in a lonely segmentation fault. Please add some elements to your list before trying to sort it." << endl;
+            break;
+        case 3:
+            cout << "Error: Trying to sort a zero-sized list is like trying to build a time machine out of a toaster. It might seem like a good idea in theory, but it's just not going to work. Trust us, we've been there before. We once tried to build a time machine out of a toaster, a blender, and a rubber duck, and it didn't end well. We ended up causing a rift in the space-time continuum and accidentally traveled back to the time of the dinosaurs. Needless to say, things got a bit messy. So please, learn from our mistake and add some elements to your list before attempting to sort it." << endl;
+            break;
+        case 4:
+            cout << "Error: Sorting a zero-sized list is like trying to teach a goldfish how to play chess. Sure, you might have good intentions and want to teach your little aquatic friend a new skill, but it's just not going to happen. We once tried to teach a goldfish how to play chess, and let's just say it didn't go well. We ended up with a soggy chessboard and a very confused fish. So please, spare yourself the trouble and add some elements to your list before attempting to sort it." << endl;
+            break;
+        case 5:
+            cout << "Oops! It looks like you're trying to sort a zero-sized list. While we appreciate your enthusiasm for sorting, we must remind you that trying to sort an empty list is like trying to bake a cake with no ingredients. So please, make sure your list has some elements before attempting to sort it." << endl;
+            break;
+        case 6:
+            cout << "Error: What on earth are you thinking? Trying to sort a zero-sized list is an unholy practice that goes against the very laws of nature. We're talking sacrilege, blasphemy, and a whole lot of other words we can't say in a polite way. So please, for the sake of all that is good and right in this world, add some elements to your list before attempting to sort it. And don't ever, EVER try to sort a zero-sized list again." << endl;
+            break;
+        case 7:
+            cout << "Verily I say unto thee, attempting to sort a zero-sized list is like sowing seed in barren soil. For as the seed falls upon the barren soil, so too shall thy attempt at sorting come to naught. Thy list shall remain unordered, and thou shalt be left with naught but a segmentation fault to mark thy efforts. For lo, it is not right to attempt to sort that which is void of substance, and such actions are not pleasing unto the gods of code. Therefore, add elements unto thy list before attempting to sort, and thy programming shall prospe" << endl;
+            break;
+        case 8:
+            cout << "Wait a minute, what's going on here?" << endl <<
+                    "This array seems to have disappeared" << endl <<
+                    "It's not even there, not even a byte" << endl <<
+                    "And now you want us to sort it just right?" << endl <<
+                    endl <<
+                    "We're not quite sure how to proceed" << endl <<
+                    "For there's nothing here, no data to feed" << endl <<
+                    "It's like asking us to paint the sky" << endl <<
+                    "When there's no canvas, no paint to apply" << endl <<
+                    endl <<
+                    "Perhaps there's an error in the code" << endl <<
+                    "And your array, it simply won't load" << endl <<
+                    "Or maybe you're just having some fun" << endl <<
+                    "And this is all a test, with nothing to be done" << endl <<
+                    endl <<
+                    "Either way, we can't sort what's not there" << endl <<
+                    "So please ensure that your array is aware" << endl <<
+                    "And has elements to sort and align" << endl <<
+                    "Then we'll be happy to help, and all will be fine." << endl;
+            break;
+        case 9:
+            cout << "How do you expect me to sort a list of size zero? I'm not a magician, you know. I can't just make elements appear out of thin air. I need data to work with, and right now, I don't have any. So please, add some elements to your list before attempting to sort it." << endl;
+    }
+}
+
+
+// I hope it works
