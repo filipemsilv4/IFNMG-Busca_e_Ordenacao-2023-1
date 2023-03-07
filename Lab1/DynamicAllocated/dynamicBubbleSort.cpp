@@ -99,6 +99,11 @@ void stressMode(){
     // Generate 1000 random lists, each with a random number of random elements
     // Print the average time it took to sort all the lists
 
+    auto startAll = chrono::high_resolution_clock::now();
+    auto averageTime = 0;
+
+    cout << "Number of elements,Time taken by the sorting function" << endl;
+
     // Generate 1000 random lists
     for (int i = 0; i < 1000; i++){
         int howManyNumbers = rand() % 1000 + 1;
@@ -112,14 +117,24 @@ void stressMode(){
         list->bubbleSort(list->head, list->head->next, list->getSize(), 'n');
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+        
+        averageTime += duration.count();
 
-        // Print the time it took to sort the list
-        cout << " Time taken by the sorting function: " << duration.count() << " microseconds" << endl;
+        // Print the number of elements of the list and the time it took to sort it
+        cout << howManyNumbers << "," << duration.count() << endl;
 
         // Delete the list
         delete list;
         list = nullptr;
     }
+    auto endAll = chrono::high_resolution_clock::now();
+
+    // Average time: 0.0000000
+    cout << endl << "Average time: " << averageTime / 1000 << " microseconds" << endl;
+
+    // Total time: 0.0000000
+    auto durationAll = chrono::duration_cast<chrono::microseconds>(endAll - startAll);
+    cout << "Total time  : " << durationAll.count() << " microseconds" << endl << endl;
 }
 
 // I know this is a bit stupid, but i was bored
