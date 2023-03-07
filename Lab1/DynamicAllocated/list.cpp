@@ -16,9 +16,21 @@ class LinkedList{
         Node* tail;
         int size;
         
+        // Constructor
         LinkedList(){
             head = NULL;
             tail = NULL;
+            size = 0;
+        }
+
+        // Destructor
+        ~LinkedList(){
+            Node* temp = head;
+            while(temp != NULL){
+                Node* next = temp->next;
+                delete temp;
+                temp = next;
+            }
             size = 0;
         }
 
@@ -30,8 +42,7 @@ class LinkedList{
             if(head == NULL){
                 head = temp;
                 tail = temp;
-            }
-            else{
+            } else{
                 tail->next = temp;
                 temp->prev = tail;
                 tail = temp;
@@ -59,7 +70,7 @@ class LinkedList{
         // Recursive Faster Bubble Sort
         void bubbleSort(Node *auxPrimary, Node *auxSecondary, int pos, char seeList){
             // if the array is empty or has only one element, it is sorted
-            if (pos == 1){ return; }
+            if (pos <= 1){ return; }
 
             // we will skip the already sorted elements, reducing the size of the array
             int newSize = pos;

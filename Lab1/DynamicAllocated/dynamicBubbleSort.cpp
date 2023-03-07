@@ -13,6 +13,7 @@ int main(int argc, char *argv[]){
     char seeList, seeTime;
     // if argv == "-stress", then the program will run in stress mode
     if (argc == 2 && string(argv[1]) == "-stress"){
+        srand(time(NULL));
         stressMode();
         return 0;
     }
@@ -100,8 +101,7 @@ void stressMode(){
 
     // Generate 1000 random lists
     for (int i = 0; i < 1000; i++){
-        // Generate a random number of elements
-        int howManyNumbers = rand() % 1000;
+        int howManyNumbers = rand() % 1000 + 1;
         LinkedList *list = new LinkedList();
 
         // Generate a random number of elements
@@ -114,7 +114,7 @@ void stressMode(){
         auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 
         // Print the time it took to sort the list
-        cout << i << " Time taken by the sorting function: " << duration.count() << " microseconds" << endl;
+        cout << " Time taken by the sorting function: " << duration.count() << " microseconds" << endl;
 
         // Delete the list
         delete list;
