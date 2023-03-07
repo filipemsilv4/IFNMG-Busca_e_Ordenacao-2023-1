@@ -7,9 +7,15 @@
 using namespace std;
 
 void zeroSizeListError();
+void stressMode();
 
 int main(int argc, char *argv[]){
     char seeList, seeTime;
+    // if argv == "-stress", then the program will run in stress mode
+    if (argc == 2 && string(argv[1]) == "-stress"){
+        stressMode();
+        return 0;
+    }
 
     // Ask the user if he wants to see the list after each iteration
     do{
@@ -86,6 +92,34 @@ int main(int argc, char *argv[]){
     }
     list->bubbleSort(list->head, list->head->next, list->getSize(), seeList);
     return 0;
+}
+
+void stressMode(){
+    // Generate 1000 random lists, each with a random number of random elements
+    // Print the average time it took to sort all the lists
+
+    // Generate 1000 random lists
+    for (int i = 0; i < 1000; i++){
+        // Generate a random number of elements
+        int howManyNumbers = rand() % 1000;
+        LinkedList *list = new LinkedList();
+
+        // Generate a random number of elements
+        for (int j = 0; j < howManyNumbers; j++){ list->add(rand() % 1000); }
+
+        // Sort the list
+        auto start = chrono::high_resolution_clock::now();
+        list->bubbleSort(list->head, list->head->next, list->getSize(), 'n');
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+
+        // Print the time it took to sort the list
+        cout << i << " Time taken by the sorting function: " << duration.count() << " microseconds" << endl;
+
+        // Delete the list
+        delete list;
+        list = nullptr;
+    }
 }
 
 // I know this is a bit stupid, but i was bored
