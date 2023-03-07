@@ -11,9 +11,9 @@ void stressMode();
 
 int main(int argc, char *argv[]){
     char seeList, seeTime;
+    srand(time(NULL));
     // if argv == "-stress", then the program will run in stress mode
     if (argc == 2 && string(argv[1]) == "-stress"){
-        srand(time(NULL));
         stressMode();
         return 0;
     }
