@@ -64,9 +64,9 @@ class LinkedList{
             // we will skip the already sorted elements, reducing the size of the array
             int newSize = pos;
 
-            // if no swap is made, the array is sorted
             bool swapped = false;
 
+            // iterate through the array
             for (int j = 0; j < newSize - 1; j++){
                 if (auxPrimary->val > auxSecondary->val){
                     swap(auxPrimary, auxSecondary);
@@ -87,7 +87,7 @@ class LinkedList{
             auxSecondary = head->next;
 
             if (seeList == 'y'){
-                cout << "---- Iteration " << getSize() - pos + 1 << " ----" << endl;
+                cout << "----== Iteration " << getSize() - pos + 1 << " ==----" << endl;
                 print();
             }
 
