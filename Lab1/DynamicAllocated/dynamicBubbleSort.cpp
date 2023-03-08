@@ -9,6 +9,7 @@ using namespace std;
 void zeroSizeListError();
 void stressMode();
 
+
 int main(int argc, char *argv[]){
     char seeList, seeTime;
     srand(time(NULL));
@@ -95,6 +96,7 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
+
 void stressMode(){
     // Generate 1000 random lists, each with a random number of random elements
     // Print the average time it took to sort all the lists
@@ -122,7 +124,7 @@ void stressMode(){
 
         // Print the number of elements of the list and the time it took to sort it
         cout << howManyNumbers << "," << duration.count() << endl;
-
+        
         // Delete the list
         delete list;
         list = nullptr;
@@ -136,6 +138,7 @@ void stressMode(){
     auto durationAll = chrono::duration_cast<chrono::microseconds>(endAll - startAll);
     cout << "Total time  : " << durationAll.count() << " microseconds" << endl << endl;
 }
+
 
 // I know this is a bit stupid, but i was bored
 void zeroSizeListError(){

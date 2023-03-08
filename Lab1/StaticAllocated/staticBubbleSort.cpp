@@ -1,84 +1,57 @@
 #include <iostream>
 #include <chrono>
+#include <cstdlib>
 
 using namespace std;
 
-void stressMode(char);
-void bubbleSort(int [], int);
-void fasterBubbleSort(int [], int);
+void stressMode(char, char);
+void bubbleSort(int [], int, char);
+void fasterBubbleSort(int [], int, char);
 void displayArray(int [], int);
 void generateRandomArray(int [], int);
-void recursiveFasterBubbleSort(int [], int);
+void recursiveFasterBubbleSort(int [], int, char);
+void usage();
 
+int ogListSize = 0;
 
 int main(int argc, char *argv[]){
+    // Ensure that the user has entered a VALID command line argument
+    if (argc < 2 || (argv[1][0] != 'f' && argv[1][0] != 'r' && argv[1][0] != 'n')){
+        usage();
+        return 0;
+    }
+
+    // Ask if the user wants to see the list after each iteration
+    cout << "Do you want to see the list after each iteration? (y/n) ";
+    char seeList; cin >> seeList;
 
     // Stress mode test
     if (argc == 3 && string(argv[2]) == "-stress"){
-        if ((argv[1][0] != 'f' && argv[1][0] != 'r' && argv[1][0] != 'n')){
-            cout << argv[1][0] << " is an not option" << endl;
-            return 0;
-        }
-        stressMode(argv[1][0]);
+        stressMode(argv[1][0], seeList);
         return 0;
     }
-    
 
-    // Ensure that the user has entered a VALID command line argument
-    if (argc != 2 || (argv[1][0] != 'f' && argv[1][0] != 'r' && argv[1][0] != 'n')){
-        cout << "Usage: sort f|n|r" << endl;
-        cout << "f = faster bubble sort" << endl;
-        cout << "n = normal bubble sort" << endl;
-        cout << "r = recursive faster bubble sort" << endl;
-        cout << "f|n|r -stress = sort with stress mode" << endl;
-
-        return 1;
-    }
-
-
-
-    int values[] = { 5, 7, 2, 8, 9, 1, 4, 3, 6 };
+    int values[] = { 70, 1, 12, 8, 99, 72, 5, 15, 20, 91, 14, 61, 66, 41, 81, 88, 16, 21, 34, 90 };
     int size = sizeof(values) / sizeof(int);
+    ogListSize = size;
 
-    generateRandomArray(values, size);
+    if      (argc > 1 && argv[1][0] == 'f'){ fasterBubbleSort(values, size, seeList); }
+    else if (argc > 1 && argv[1][0] == 'r'){ recursiveFasterBubbleSort(values, size, seeList); }
+    else if (argc > 1 && argv[1][0] == 'n'){ bubbleSort(values, size, seeList); }
 
-    cout << "The unsorted values are " << endl;
-
+    cout << "The sorted values are " << endl;
     displayArray(values, size);
 
-    if (argc > 1 && argv[1][0] == 'f'){
-        for (int i = 0; i < 100000; i++){
-            // Generate a random array each iteration
-            generateRandomArray(values, size);
-            fasterBubbleSort(values, size);
-            cout << "The sorted values are " << endl;
-            displayArray(values, size);
-        }
-    } else if (argc > 1 && argv[1][0] == 'r'){
-        for (int i = 0; i < 100000; i++){
-            // Generate a random array each iteration
-            generateRandomArray(values, size);
-            recursiveFasterBubbleSort(values, size);
-
-            cout << "The sorted values are " << endl;
-            displayArray(values, size);
-        }
-    } else if (argc > 1 && argv[1][0] == 'n'){
-        for (int i = 0; i < 100000; i++){
-            // Generate a random array each iteration
-            generateRandomArray(values, size);
-            bubbleSort(values, size);
-
-            cout << "The sorted values are " << endl;
-            displayArray(values, size);
-        }
-    }
-
-    // print argc and argv[1][0]
-    cout << "argc = " << argc << endl;
-    cout << "argv[1][0] = " << argv[1][0] << endl;
-
     return 0;
+}
+
+// Ensure proper use of the program
+void usage(){
+    cout << "Usage: sort f|n|r" << endl;
+    cout << "f = faster bubble sort" << endl;
+    cout << "n = normal bubble sort" << endl;
+    cout << "r = recursive faster bubble sort" << endl;
+    cout << "f|n|r -stress = sort with stress mode" << endl;
 }
 
 
@@ -98,25 +71,26 @@ void displayArray(int array[], int size){
 
 
 // Bubble sort
-void bubbleSort(int array[], int size){
-    for (int i = 0; i < size - 1; i++)  // Last i elements are already in place
-        for (int j = 0; j < size - 1; j++)  // Move the largest element to the end
-            if (array[j] > array[j + 1]){
-                swap(array[j], array[j + 1]);
-                /* cout << "The array is now ";
-                displayArray(array, size); */
-            }
+void bubbleSort(int array[], int size, char seeList){
+    for (int i = 0; i < size - 1; i++){  // Last i elements are already in place
+        if (seeList == 'y'){ displayArray(array, size); }
+        for (int j = 0; j < size - 1; j++){  // Move the largest element to the end
+            if (array[j] > array[j + 1]){ swap(array[j], array[j + 1]); }
+        }
+    }
 }
 
 
 // Faster Bubble Sort
-void fasterBubbleSort(int array[], int size){
+void fasterBubbleSort(int array[], int size, char seeList){
     // we will skip the already sorted elements, reducing the size of the array
     int newSize = size;
 
     for (int i = 0; i < size - 1; i++){
         // if no swap is made, the array is sorted
         bool swapped = false;
+
+        if (seeList == 'y'){ displayArray(array, size); }
 
         for (int j = 0; j < newSize - 1; j++)
             if (array[j] > array[j + 1]){
@@ -135,7 +109,7 @@ void fasterBubbleSort(int array[], int size){
 
 
 // Recursive Faster Bubble Sort
-void recursiveFasterBubbleSort(int array[], int size){
+void recursiveFasterBubbleSort(int array[], int size, char seeList){
     // if the array is empty or has only one element, it is sorted
     if (size == 1){ return; }
 
@@ -153,17 +127,18 @@ void recursiveFasterBubbleSort(int array[], int size){
     }
 
     // if no swap is made, the array is sorted
-    if (!swapped)
-        return;
+    if (!swapped){ return; }
+    
+    if (seeList == 'y'){ displayArray(array, ogListSize); }
 
     // the last element is sorted, so we can skip it
     newSize--;
 
     // sort the remaining array
-    recursiveFasterBubbleSort(array, newSize);
+    recursiveFasterBubbleSort(array, newSize, seeList);
 }
 
-void stressMode(char option){
+void stressMode(char option, char seeList){
     // Generate 1000 random vectors, each with a random number of random elements
     // Print the average time it took to sort all the vectors
 
@@ -185,13 +160,13 @@ void stressMode(char option){
         switch (option)
         {
         case 'f':
-            fasterBubbleSort(values, howManyNumbers);
+            fasterBubbleSort(values, howManyNumbers, seeList);
             break;
         case 'r':
-            recursiveFasterBubbleSort(values, howManyNumbers);
+            recursiveFasterBubbleSort(values, howManyNumbers, seeList);
             break;
         case 'n':
-            bubbleSort(values, howManyNumbers);
+            bubbleSort(values, howManyNumbers, seeList);
             break;
         }
         auto end = chrono::high_resolution_clock::now();
