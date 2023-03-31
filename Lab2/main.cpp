@@ -11,10 +11,16 @@ using namespace std;
 
 void waitForWindowWidth(int min_width);
 void display_options(vector<pair<string, bool>>& options, int max_option_length);
-void stressMode();
+void stressMode(bool show_state);
 
 
-int main() {
+int main(int argc, char** argv) {
+    // if -TUI_stresses_me is passed as an argument, ignore TUI and run stress mode
+    if (argc >= 2 && std::string(argv[1]) == "-TUI_stresses_me") {
+        stressMode(false);
+        return 0;
+    }
+    
     setlocale(LC_ALL, "");
 
     // Initialize ncurses
@@ -54,6 +60,16 @@ int main() {
     // Display options and store the ones selected by the user
     display_options(options, max_option_length);
 
+    curs_set(1);
+    // Stress mode
+    if (options[2].second) {
+        endwin();
+        stressMode(options[0].second);
+        return 0;
+    }
+
+
+
     // Terminate ncurses
     endwin();
 
@@ -89,8 +105,7 @@ void waitForWindowWidth(int min_width) {
 }
 
 
-void display_options(vector<pair<string, bool>>& options, int max_option_length) {
-    curs_set(0);
+void display_options(vector<pair<string, bool>>& options, int max_option_length){
     int selected_option = 0; // Used to keep track of the currently selected option (the one that is highlighted)
     int key; // Used to store the user input
     bool done = false; // Used to exit the loop
@@ -103,6 +118,7 @@ void display_options(vector<pair<string, bool>>& options, int max_option_length)
 
     while (!done) {
         waitForWindowWidth(box_width + 1);
+        curs_set(0);
         // Clear screen
         clear();
 
@@ -187,7 +203,7 @@ void display_options(vector<pair<string, bool>>& options, int max_option_length)
     return 0;
 } */
 
-void stressMode(){
+void stressMode(bool show_state){
     // Generate 1000 random lists, each with a random number of random elements
     // Print the average time it took to sort all the lists
 
@@ -197,7 +213,7 @@ void stressMode(){
     auto averageTime = 0;
 
     // Generate 1000 random lists
-    for (int i = 0; i < 1000; i++){
+    for (int i = 1; i <= 1000; i++){
         // Generate a list with i elements
         vector<int> *list = new vector<int>();
         for (int j = 0; j < i; j++){
@@ -206,7 +222,7 @@ void stressMode(){
         
         // Sort the list
         auto start = chrono::high_resolution_clock::now();
-        quicksort(*list, 0, list->size() - 1);
+        quicksort(*list, 0, list->size() - 1, show_state);
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
         

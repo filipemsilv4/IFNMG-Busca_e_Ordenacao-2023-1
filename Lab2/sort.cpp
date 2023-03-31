@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void quicksort(vector<int>& nums, int left, int right) {
+void quicksort(vector<int>& nums, int left, int right, bool show_state) {
     if (left >= right) { return; }
     
     int pivot = nums[left + (right - left) / 2];
@@ -24,8 +24,16 @@ void quicksort(vector<int>& nums, int left, int right) {
             nums[j] = temp;
         }
     }
+
+    if (show_state) {
+        cout << "Current state: ";
+        for (int i = 0; i < nums.size(); i++) {
+            cout << nums[i] << " ";
+        }
+        cout << endl;
+    }
     
     // Recursively sort left and right partitions
-    quicksort(nums, left, j);
-    quicksort(nums, j + 1, right);
+    quicksort(nums, left, j, show_state);
+    quicksort(nums, j + 1, right, show_state);
 }
