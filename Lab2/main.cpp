@@ -38,12 +38,13 @@ int main(int argc, char** argv) {
     vector<pair<string, bool>> options = {
         {"Show the state of the list at each iteration", false},
         {"Show the execution time of the algorithm", false},
-        {"Run with 1000 random lists of increasing size", false},
-        {"OK", false}
+        //{"Run with 1000 random lists of increasing size", false},
+        {"OK", false},
+        {"Ignore and run StressMode", false}
     };
 
     // Define display_options function's header and bottom texts
-    string title = "Select the desired options:";
+    string title = "Select StressMode or the desired options for standart mode:";
     string instructions = "Use the arrows to select, then confirm with ENTER";
 
     // Calculate the length of the longest string (including title and instructions)
@@ -110,7 +111,7 @@ void display_options(vector<pair<string, bool>>& options, int max_option_length)
     int key; // Used to store the user input
     bool done = false; // Used to exit the loop
 
-    string title = "Select the desired options:";
+    string title = "Select StressMode or the desired options for standart mode:";
     string instructions = "Use the arrows to select, then confirm with ENTER";
 
     // Calculate the width of the box
@@ -134,7 +135,7 @@ void display_options(vector<pair<string, bool>>& options, int max_option_length)
         printw("┤\n");
 
         // Options
-        for (int i = 0; i < options.size() - 1; i++) {
+        for (int i = 0; i < options.size() - 2; i++) {
             if (i == selected_option) {
                 attron(A_REVERSE); // Highlight selected option
             }
@@ -142,12 +143,40 @@ void display_options(vector<pair<string, bool>>& options, int max_option_length)
             attroff(A_REVERSE); // Disable highlighting
         }
 
-        // Last option (OK)
+        // Decoration for last buttons
+        printw("│ ┌");
+        for (int i = 0; i < max_option_length / 2 - 1; i++) { printw("─"); }
+        printw("┐ ");
+
+        printw(" ┌");
+        for (int i = 0; i < max_option_length / 2; i++) { printw("─"); }
+        printw("┐ │\n");
+
+        // Penultimate option
+        printw("│ │");
+        if (selected_option == options.size() - 2) {
+            attron(A_REVERSE); // Highlight selected option
+        }
+        printw(" %-*s", max_option_length / 2 - 2, options[options.size() - 2].first.c_str());
+        attroff(A_REVERSE); // Disable highlighting
+        printw("│ ");
+
+        // Last option
+        printw(" │");
         if (selected_option == options.size() - 1) {
             attron(A_REVERSE); // Highlight selected option
         }
-        printw("│ %-*s     │\n", max_option_length, options[options.size() - 1].first.c_str());
+        printw(" %-*s", max_option_length / 2 - 1, options[options.size() - 1].first.c_str());
         attroff(A_REVERSE); // Disable highlighting
+        printw("│ │\n");
+
+        printw("│ └");
+        for (int i = 0; i < max_option_length / 2 - 1; i++) { printw("─"); }
+        printw("┘ ");
+
+        printw(" └");
+        for (int i = 0; i < max_option_length / 2; i++) { printw("─"); }
+        printw("┘ │\n");
 
         printw("├");
         for (int i = 0; i < box_width - 2; i++) { printw("─"); }
@@ -165,10 +194,31 @@ void display_options(vector<pair<string, bool>>& options, int max_option_length)
         // Move selection based on user input
         switch (key) {
             case KEY_UP:
-                selected_option = (selected_option - 1 + options.size()) % options.size();
+                // if we are in the last option, we dont want to go to the penultimate option, so we go up 2 options
+                if (selected_option == options.size() - 1) {
+                    selected_option = (selected_option - 2 + options.size()) % options.size();
+                } else {
+                    selected_option = (selected_option - 1 + options.size()) % options.size();
+                }
                 break;
             case KEY_DOWN:
                 selected_option = (selected_option + 1) % options.size();
+                break;
+            case KEY_LEFT:
+                // If we are on the last option, go to the penultimate option, if we are in the penultimate option, go to the last option
+                if (selected_option == options.size() - 1) {
+                    selected_option = options.size() - 2;
+                } else if (selected_option == options.size() - 2) {
+                    selected_option = options.size() - 1;
+                }
+                break;
+            case KEY_RIGHT:
+                // If we are on the last option, go to the penultimate option, if we are in the penultimate option, go to the last option
+                if (selected_option == options.size() - 1) {
+                    selected_option = options.size() - 2;
+                } else if (selected_option == options.size() - 2) {
+                    selected_option = options.size() - 1;
+                }
                 break;
             case '\n': // User pressed enter
                 if (selected_option == options.size() - 1) {
