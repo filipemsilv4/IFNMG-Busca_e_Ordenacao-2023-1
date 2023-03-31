@@ -1,14 +1,18 @@
+// Compile with "g++ -o main main.cpp -lncurses"
 #include <iostream>
 #include <chrono>
-#include "sort.cpp"
 #include <ncurses.h>
 #include <vector>
 #include <utility>
 #include <locale.h>
+#include "sort.cpp"
 
 using namespace std;
 
+void waitForWindowWidth(int min_width);
+void display_options(vector<pair<string, bool>>& options, int max_option_length);
 void stressMode();
+
 
 int main() {
     setlocale(LC_ALL, "");
@@ -18,49 +22,129 @@ int main() {
         fprintf(stderr, "Error initializing ncurses.\n");
         return 1;
     }
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE);
+    cbreak(); // Disable line buffering (so we can get user input immediately)
+    noecho(); // Disable echoing of user input
+    curs_set(0); // Hide cursor
+    keypad(stdscr, TRUE); // Enable special keys (like arrow keys)
+
 
     // Define options
     vector<pair<string, bool>> options = {
-        {"Mostrar o estado da lista a cada iteração", false},
-        {"Mostrar o tempo de execução do algoritmo ", false},
+        {"Show the state of the list at each iteration", false},
+        {"Show the execution time of the algorithm", false},
+        {"Run with 1000 random lists of increasing size", false},
         {"OK", false}
     };
 
-    // Set initial selected option
-    int selected_option = 0;
+    // Define display_options function's header and bottom texts
+    string title = "Select the desired options:";
+    string instructions = "Use the arrows to select, then confirm with ENTER";
 
-    // Loop until user selects an option or exits
-    bool done = false;
+    // Calculate the length of the longest string (including title and instructions)
+    int max_option_length = title.length();
+    for (int i = 0; i < options.size(); i++) {
+        if (options[i].first.length() > max_option_length) {
+            max_option_length = options[i].first.length();
+        }
+    }
+    if (instructions.length() > max_option_length) {
+        max_option_length = instructions.length();
+    }
+
+    // Display options and store the ones selected by the user
+    display_options(options, max_option_length);
+
+    // Terminate ncurses
+    endwin();
+
+    // Print selected options
+    for (int i = 0; i < options.size() - 1; i++) {
+        cout << options[i].first << ": " << (options[i].second ? "Yes" : "No") << endl;
+    }
+    
+    return 0;
+}
+
+
+void waitForWindowWidth(int min_width) {
+    clear();  // clear the screen
+    int cols;
+    int tmp;
+
+    curs_set(0);  // hide cursor
+    cols = getmaxx(stdscr);  // get window width
+    tmp = cols;
+
+    while (cols < min_width) {
+        mvprintw(0, 0, "  << The current terminal width is %d, please increase the size to at least %d. >>  ", cols, min_width);
+        refresh();  // update the screen
+        cols = getmaxx(stdscr);  // get updated window width
+        if (tmp != cols) {
+            clear();  // clear the screen
+            tmp = cols;
+        }
+    }
+
+    curs_set(1);  // show cursor
+}
+
+
+void display_options(vector<pair<string, bool>>& options, int max_option_length) {
+    curs_set(0);
+    int selected_option = 0; // Used to keep track of the currently selected option (the one that is highlighted)
+    int key; // Used to store the user input
+    bool done = false; // Used to exit the loop
+
+    string title = "Select the desired options:";
+    string instructions = "Use the arrows to select, then confirm with ENTER";
+
+    // Calculate the width of the box
+    int box_width = max_option_length + 8;
+
     while (!done) {
+        waitForWindowWidth(box_width + 1);
         // Clear screen
         clear();
 
         // Print options
-        printw(" ┌────────────────────────────────────────────────┐\n");
-        printw(" │ Selecione as opções desejadas:                 │\n");
-        printw(" │                                                │\n");
+        // Header
+        printw("┌");
+        for (int i = 0; i < box_width - 2; i++) { printw("─"); }
+        printw("┐\n");
+        printw("│ %-*s │\n", box_width - 4, title.c_str());
+
+        printw("├");
+        for (int i = 0; i < box_width - 2; i++) { printw("─"); }
+        printw("┤\n");
+
+        // Options
         for (int i = 0; i < options.size() - 1; i++) {
             if (i == selected_option) {
                 attron(A_REVERSE); // Highlight selected option
             }
-            printw(" │  %-41s [%s] │\n", options[i].first.c_str(), options[i].second ? "X" : " ");
+            printw("│ %-*s[%s] │\n", max_option_length + 1, options[i].first.c_str(), options[i].second ? "X" : " ");
             attroff(A_REVERSE); // Disable highlighting
         }
+
+        // Last option (OK)
         if (selected_option == options.size() - 1) {
             attron(A_REVERSE); // Highlight selected option
         }
-        printw(" │  %-45s │\n", options[options.size() - 1].first.c_str());
+        printw("│ %-*s     │\n", max_option_length, options[options.size() - 1].first.c_str());
         attroff(A_REVERSE); // Disable highlighting
-        printw(" │                                                │\n");
-        printw(" │ Use as setas para selecionar e ENTER para      │\n");
-        printw(" │ confirmar.                                     │\n");
-        printw(" └────────────────────────────────────────────────┘\n");
+
+        printw("├");
+        for (int i = 0; i < box_width - 2; i++) { printw("─"); }
+        printw("┤\n");
+
+        // Instructions
+        printw("│ %-*s │\n", box_width - 4, instructions.c_str());
+        printw("└");
+        for (int i = 0; i < box_width - 2; i++) { printw("─"); }
+        printw("┘\n");
 
         // Get user input
-        int key = getch();
+        key = getch();
 
         // Move selection based on user input
         switch (key) {
@@ -81,12 +165,7 @@ int main() {
                 break;
         }
     }
-
-    // Terminate ncurses
-    endwin();
-    return 0;
 }
-
 
 
 /* int main() {
