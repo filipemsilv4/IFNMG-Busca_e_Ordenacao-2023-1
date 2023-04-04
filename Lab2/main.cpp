@@ -63,11 +63,11 @@ int main(int argc, char** argv) {
 
     curs_set(1);
     // Stress mode
-    if (options[2].second) {
+    if (options[3].second) {
         endwin();
-        stressMode(options[0].second);
+        stressMode(options[3].second);
         return 0;
-    }
+    }else{}
 
 
 
@@ -75,6 +75,7 @@ int main(int argc, char** argv) {
     endwin();
 
     // Print selected options
+    cout <<"\n\n_______________________________\n";
     for (int i = 0; i < options.size() - 1; i++) {
         cout << options[i].first << ": " << (options[i].second ? "Yes" : "No") << endl;
     }
@@ -222,9 +223,15 @@ void display_options(vector<pair<string, bool>>& options, int max_option_length)
                 break;
             case '\n': // User pressed enter
                 if (selected_option == options.size() - 1) {
+                    cout << "\n\n1. > " << options[selected_option].first;
                     done = true; // Exit loop
-                } else {
-                    options[selected_option].second = !options[selected_option].second; // Toggle option
+                } else if (selected_option == options.size() - 2){
+                    cout << "\n\n" << selected_option << "\n\n2. > " << options[selected_option].first;
+                    options[selected_option].second = true;
+                } 
+                else {
+                    cout << selected_option << "\n\n3. > " << options[selected_option].first;
+                    options[selected_option].second = true; // Toggle option
                 }
                 break;
             default:
