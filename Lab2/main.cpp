@@ -83,7 +83,7 @@ int main(int argc, char **argv)
         int number;
         for (int j = 0; j < size; j++)
         {
-            cout << "Type the " << j + 1 << " number of lits: ";
+            cout << "Type the " << j + 1 << " number of list: ";
             cin >> number;
             list->push_back(number);
         }
