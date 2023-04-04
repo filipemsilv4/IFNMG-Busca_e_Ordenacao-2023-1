@@ -80,11 +80,15 @@ int main(int argc, char **argv)
         cin >> size; // size list
         cout << "\n";
         vector<int> *list = new vector<int>();
+        int number;
         for (int j = 0; j < size; j++)
         {
-            list->push_back(rand() % 1000);
+            cout << "Type the " << j + 1 << " number of lits: ";
+            cin >> number;
+            list->push_back(number);
         }
 
+        cout << "\n" << endl;
         if (options[1].second)
         {
             auto startAll = chrono::high_resolution_clock::now();
