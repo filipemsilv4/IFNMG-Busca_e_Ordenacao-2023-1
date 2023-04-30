@@ -6,10 +6,10 @@
 #include <string.h>
 #include <math.h>
 
-// Donut (remember to delete this)
+/*// Donut (I guess we will keep it commented since it is so cool)
 #include <stdlib.h>
 #include <unistd.h>
-#include <ncurses.h>
+#include <ncurses.h>*/
 
 
 using namespace std;

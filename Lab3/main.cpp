@@ -1,4 +1,4 @@
-// Compile with "g++ -o main main.cpp -lncurses -std=c++11"
+// Compile with at least c++11 -> "g++ -o main main.cpp -lncurses -std=c++11"
 #include <locale.h>
 #include <ncurses.h>
 
@@ -22,9 +22,9 @@ int main(int argc, char **argv) {
     // if -TUI_stresses_me is passed as an argument, ignore TUI and run stress mode
     if (argc >= 3 && string(argv[1]) == "-TUI_stresses_me") {
         if (string(argv[2]) == "merge_sort"){
-            stressMode(false, "merge_sort");
+            stressMode(false, "Merge Sort");
         } else if (string(argv[2]) == "heap_sort"){
-            stressMode(false, "heap_sort");
+            stressMode(false, "Heap Sort");
         } else {
             cout << "Invalid algorithm name" << endl;
         }
@@ -424,3 +424,5 @@ void stressMode(bool show_state, string algorithm) {
          << endl;
 }
 
+
+// I hope it works
