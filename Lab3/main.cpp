@@ -1,14 +1,14 @@
 // Compile with at least c++11 -> "g++ -o main main.cpp -lncurses -std=c++11"
+#include "sort.cpp"
+
 #include <locale.h>
 #include <ncurses.h>
 
 #include <chrono>
 #include <iostream>
 #include <utility>
-#include <vector>
 #include <map>
 
-#include "sort.cpp"
 
 using namespace std;
 

@@ -1,9 +1,8 @@
-#include <vector>
+#include "sort.hpp"
 #include <algorithm>
 #include <iostream>
 
 #include <stdio.h>
-#include <string.h>
 #include <math.h>
 
 /*// Donut (I guess we will keep it commented since it is so cool)
@@ -59,37 +58,44 @@ void merge_sort(vector<int>& v, int left, int right, bool show_list_state){
     }
 }
 
+
 // heap_sort
-int parent(int i){ return (i/2); }
-int left(int i){ return (2*i); }
-int right(int i){ return (2*i + 1); }
+//int parent(int i){ return (i/2); }
+int left(int i)  { return (2*i); }
+int right(int i) { return (2*i + 1); }
 
 void heapify(vector<int>& v, int i){
-    int l = left(i);
-    int r = right(i);
-    int g;
+    int l = left(i) ;   // left child index
+    int r = right(i);   // right child index
+    int g;  // index of the greatest element
 
+    // Find the greatest element between the parent and its children
     if ((l < v.size()) && v[l] > v[i]){ g = l; }
-    else{ g = i; }
+    else{ g = i; }  // If the parent is the greatest, then we are done
 
+    // If the right child is the greatest, then update the index
     if ((r <= v.size()) && v[r] > v[g]){ g = r; }
 
+    // If the greatest element is not the parent, then swap them and heapify the new parent
     if(g != i){
         swap(v[i], v[g]);
         heapify(v, g);
     }
 }
 
+
 void create_heap(vector<int>& v){
-    int m = (v.size() - 1)/2;
-    for (int i = m; i > 0; i--){ heapify(v, i); }
+    int m = (v.size() - 1)/2;  // Index of the last parent
+    for (int i = m; i > 0; i--){ heapify(v, i); }  // Heapify all parents
 }
+
 
 void heap_sort(vector<int>& v, bool show_list_state){
     create_heap(v);
-    int f = v.size() - 1;
-    for (int i = f; i >= 0; i--)
-    {
+    int f = v.size() - 1;  // Index of the last element
+    
+    // Swap the first and last elements, heapify the new root, and repeat
+    for (int i = f; i >= 0; i--){
         swap(v[1], v[i]);
         heapify(v, 1);
         if (show_list_state) {
@@ -101,6 +107,7 @@ void heap_sort(vector<int>& v, bool show_list_state){
         }
     }   
 }
+
 
 /*void heap_sort(vector<int>& v){
     // Originally Code by Andy Sloane https://www.a1k0n.net/2011/07/20/donut-math.html
@@ -146,4 +153,11 @@ void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool sh
     }else if(algorithm == "Heap Sort"){
         heap_sort(v, show_list_state);
     }
+
+    // Print the sorted list
+    cout << "Sorted list: ";
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i] << " ";
+    }
+    cout << endl;
 }
