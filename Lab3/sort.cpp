@@ -51,8 +51,50 @@ void merge_sort(vector<int>& v, int left, int right){
     }
 }
 
+// heap_sort
+int parent(int i){ return (i/2); }
+int left(int i){ return (2*i); }
+int right(int i){ return (2*i + 1); }
 
-void heap_sort(vector<int>& v){
+void heapify(vector<int>& v, int i){
+    int l = left(i);
+    int r = right(i);
+    int g;
+
+    if ((l < v.size()) && v[l] > v[i]){ g = l; }
+    else{ g = i; }
+
+    if ((r <= v.size()) && v[r] > v[g]){ g = r; }
+
+    if(g != i){
+        swap(v[i], v[g]);
+        heapify(v, g);
+    }
+}
+
+void create_heap(vector<int>& v){
+    int m = (v.size() - 1)/2;
+    for (int i = m; i > 0; i--){ heapify(v, i); }
+}
+
+void heap_sort(vector<int>& v, bool show_list_state){
+    create_heap(v);
+    int f = v.size() - 1;
+    for (int i = f; i >= 0; i--)
+    {
+        swap(v[1], v[i]);
+        heapify(v, 1);
+        if (show_list_state) {
+            cout << "Current state: ";
+            for (int i = 0; i < v.size(); i++) {
+                cout << v[i] << " ";
+            }
+            cout << endl;
+        }
+    }   
+}
+
+/*void heap_sort(vector<int>& v){
     // Originally Code by Andy Sloane https://www.a1k0n.net/2011/07/20/donut-math.html
     float A = 0, B = 0, i, j, z[1760];
     char b[1760];
@@ -87,7 +129,7 @@ void heap_sort(vector<int>& v){
         usleep(50000); // Sleep for 50 milliseconds to slow down the animation
     }
     endwin(); // End ncurses mode
-}
+}*/
 
 
 void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state){    
