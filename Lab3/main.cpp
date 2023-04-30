@@ -15,6 +15,8 @@ using namespace std;
 map<string, int> waitForWindowWidth(int min_width);
 void display_options(vector<pair<string, bool>> &options, int max_option_length, string title, string instructions);
 void stressMode(bool show_state, string algorithm);
+void get_list(string chosen_algorithm, vector<pair<string, bool>> &options);
+
 
 int main(int argc, char **argv) {
     // if -TUI_stresses_me is passed as an argument, ignore TUI and run stress mode
@@ -102,67 +104,71 @@ int main(int argc, char **argv) {
 
     curs_set(1);
 
-
     // Stress mode
     endwin();
     if (options[3].second) {
         stressMode(options[0].second, chosen_algorithm);
         return 0;
     } else if (options[2].second) {
-        int size;
-        cout << "\nType size of list: ";
-        cin >> size;  // size list
-        cout << "\n";
-        vector<int> *list = new vector<int>();
-        int number;
-
-        for (int j = 0; j < size; j++) {
-            cout << "Type the " << j + 1 << " number of list: ";
-            cin >> number;
-            list->push_back(number);
-        }
-
-        cout << "\n" << endl;
-
-        // Show execution time
-        if (options[1].second) {
-            auto startAll = chrono::high_resolution_clock::now();
-            auto averageTime = 0;
-
-            // Sort the list
-            auto start = chrono::high_resolution_clock::now();
-            sort_wrapper(*list, chosen_algorithm, 0, list->size() - 1, options[0].second);
-            auto end = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-
-            averageTime += duration.count();
-
-            // Delete the list
-            delete list;
-            auto endAll = chrono::high_resolution_clock::now();
-
-            // Average time: 0.0000000
-            cout << endl
-                 << "Average time: " << averageTime / 1000 << " microseconds"
-                 << endl;
-
-            // Total time: 0.0000000
-            auto durationAll =
-                chrono::duration_cast<chrono::microseconds>(endAll - startAll);
-            cout << "Total time  : " << durationAll.count() << " microseconds"
-                 << endl
-                 << endl;
-        } else {
-            sort_wrapper(*list, chosen_algorithm, 0, list->size() - 1, options[0].second);
-        }
-
-        for (int i = 0; i < list->size(); i++) {
-            cout << list->at(i) << " ";
-        }
-        cout << endl;
+        get_list(chosen_algorithm, options);
     }
 
     return 0;
+}
+
+
+void get_list(string chosen_algorithm, vector<pair<string, bool>> &options){
+    int size;
+    cout << "\nType size of list: ";
+    cin >> size;  // size list
+    cout << "\n";
+    vector<int> *list = new vector<int>();
+    int number;
+
+    for (int j = 0; j < size; j++) {
+        cout << "Type the " << j + 1 << " number of list: ";
+        cin >> number;
+        list->push_back(number);
+    }
+
+    cout << "\n" << endl;
+
+    // Show execution time
+    if (options[1].second) {
+        auto startAll = chrono::high_resolution_clock::now();
+        auto averageTime = 0;
+
+        // Sort the list
+        auto start = chrono::high_resolution_clock::now();
+        sort_wrapper(*list, chosen_algorithm, 0, list->size() - 1, options[0].second);
+        auto end = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+
+        averageTime += duration.count();
+
+        // Delete the list
+        delete list;
+        auto endAll = chrono::high_resolution_clock::now();
+
+        // Average time: 0.0000000
+        cout << endl
+                << "Average time: " << averageTime / 1000 << " microseconds"
+                << endl;
+
+        // Total time: 0.0000000
+        auto durationAll =
+            chrono::duration_cast<chrono::microseconds>(endAll - startAll);
+        cout << "Total time  : " << durationAll.count() << " microseconds"
+                << endl
+                << endl;
+    } else {
+        sort_wrapper(*list, chosen_algorithm, 0, list->size() - 1, options[0].second);
+    }
+
+    for (int i = 0; i < list->size(); i++) {
+        cout << list->at(i) << " ";
+    }
+    cout << endl;
 }
 
 
