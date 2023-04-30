@@ -145,30 +145,17 @@ void get_list(string chosen_algorithm, vector<pair<string, bool>> &options){
         auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
 
         averageTime += duration.count();
-
-        // Delete the list
-        delete list;
         auto endAll = chrono::high_resolution_clock::now();
 
         // Average time: 0.0000000
-        cout << endl
-                << "Average time: " << averageTime / 1000 << " microseconds"
-                << endl;
+        cout << endl << "Average time: " << averageTime / 1000 << " microseconds" << endl;
 
         // Total time: 0.0000000
-        auto durationAll =
-            chrono::duration_cast<chrono::microseconds>(endAll - startAll);
-        cout << "Total time  : " << durationAll.count() << " microseconds"
-                << endl
-                << endl;
+        auto durationAll = chrono::duration_cast<chrono::microseconds>(endAll - startAll);
+        cout << "Total time  : " << durationAll.count() << " microseconds" << endl << endl;
     } else {
         sort_wrapper(*list, chosen_algorithm, 0, list->size() - 1, options[0].second);
     }
-
-    for (int i = 0; i < list->size(); i++) {
-        cout << list->at(i) << " ";
-    }
-    cout << endl;
 }
 
 
