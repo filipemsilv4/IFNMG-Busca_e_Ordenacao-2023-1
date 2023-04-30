@@ -15,7 +15,7 @@
 using namespace std;
 
 
-void merge_aux(vector<int>& v, int left, int mid, int right){
+void merge_aux(vector<int>& v, int left, int mid, int right, bool show_list_state){
     // Create a temporary vector to store the sorted elements
     vector<int> tmp(right - left + 1);
 
@@ -39,15 +39,23 @@ void merge_aux(vector<int>& v, int left, int mid, int right){
     for(int i = 0; i < tmp.size(); i++){
         v[left + i] = tmp[i];
     }
+
+    if (show_list_state) {
+        cout << "Current state: ";
+        for (int i = 0; i < v.size(); i++) {
+            cout << v[i] << " ";
+        }
+        cout << endl;
+    }
 }
 
 
-void merge_sort(vector<int>& v, int left, int right){  
-    if(left < right - 1){  // Base case: 1 or 0 elements (already sorted)
+void merge_sort(vector<int>& v, int left, int right, bool show_list_state){  
+    if(left < right){  // Base case: 1 or 0 elements (already sorted)
         int mid = (left + right) / 2;
-        merge_sort(v, left, mid);       // Sort left half
-        merge_sort(v, mid, right);  // Sort right half
-        merge_aux(v, left, mid, right); // Merge the two halves
+        merge_sort(v, left, mid, show_list_state);       // Sort left half
+        merge_sort(v, mid + 1, right, show_list_state);  // Sort right half
+        merge_aux(v, left, mid + 1, right, show_list_state); // Merge the two halves
     }
 }
 
@@ -134,8 +142,8 @@ void heap_sort(vector<int>& v, bool show_list_state){
 
 void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state){    
     if(algorithm == "Merge Sort"){
-        merge_sort(v, left, right);
+        merge_sort(v, left, right, show_list_state);
     }else if(algorithm == "Heap Sort"){
-        heap_sort(v);
+        heap_sort(v, show_list_state);
     }
 }
