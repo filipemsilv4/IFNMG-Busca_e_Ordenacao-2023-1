@@ -1,5 +1,5 @@
-// Compile with at least c++11 -> "g++ -o main main.cpp -lncurses -std=c++11"
-#include "sort.cpp"
+// Compile with at least c++11 -> "g++ -std=c++11 main.cpp sort.cpp -lncurses -o main"
+#include "sort.hpp"
 
 #include <locale.h>
 #include <ncurses.h>
@@ -146,9 +146,6 @@ void get_list(string chosen_algorithm, vector<pair<string, bool>> &options){
 
         averageTime += duration.count();
         auto endAll = chrono::high_resolution_clock::now();
-
-        // Average time: 0.0000000
-        cout << endl << "Average time: " << averageTime / 1000 << " microseconds" << endl;
 
         // Total time: 0.0000000
         auto durationAll = chrono::duration_cast<chrono::microseconds>(endAll - startAll);
@@ -397,7 +394,7 @@ void stressMode(bool show_state, string algorithm) {
 
         // Sort the list
         auto start = chrono::high_resolution_clock::now();
-        sort_wrapper(*list, algorithm, 0, list->size() - 1, show_state);
+        sort_wrapper(*list, algorithm, 0, list->size() - 1, show_state, true);
         auto end = chrono::high_resolution_clock::now();
         auto duration =
             chrono::duration_cast<chrono::microseconds>(end - start);

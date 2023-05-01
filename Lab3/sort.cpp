@@ -147,7 +147,7 @@ void heap_sort(vector<int>& v, bool show_list_state){
 }*/
 
 
-void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state){    
+void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state, bool stress_mode){    
     if(algorithm == "Merge Sort"){
         merge_sort(v, left, right, show_list_state);
     }else if(algorithm == "Heap Sort"){
@@ -155,9 +155,11 @@ void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool sh
     }
 
     // Print the sorted list
-    cout << "Sorted list: ";
-    for (int i = 0; i < v.size(); i++) {
-        cout << v[i] << " ";
+    if (!stress_mode){
+        cout << "Sorted list: ";
+        for (int i = 0; i < v.size(); i++) {
+            cout << v[i] << " ";
+        }
+        cout << endl;
     }
-    cout << endl;
 }

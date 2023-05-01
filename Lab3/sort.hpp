@@ -6,6 +6,6 @@
 
 using namespace std;
 
-void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state);
+void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state, bool stress_mode = false);
 
 #endif
