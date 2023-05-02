@@ -13,10 +13,23 @@
 using namespace std;
 
 
+// Função para fazer a troca de dois elementos em um vetor
+void swap(vector<int>& v, int i, int j) {
+    int temp = v[i];
+    v[i] = v[j];
+    v[j] = temp;
+}
+
+
 void print_vector(vector<int>& v){
     for (int i = 0; i < v.size(); i++) { cout << v[i] << " "; }
     cout << endl;
 }
+
+
+/*------------*/
+// MERGE SORT //
+/*------------*/
 
 void merge_aux(vector<int>& v, int left, int mid, int right, bool show_list_state){
     // Create a temporary vector to store the sorted elements
@@ -59,49 +72,52 @@ void merge_sort(vector<int>& v, int left, int right, bool show_list_state){
     }
 }
 
-// heap_sort
-int parent(int i){ return (i-1)/2; }
 
-int left(int i){ return (2*i + 1); }
+/*-----------*/
+// HEAP SORT //
+/*-----------*/
 
-int right(int i){ return (2*i + 2); }
+// Function that transforms the vector into a maximum heap
+void heapify(vector<int>& v, int n, int i) {
+    int largest = i; // Initialize largest as root
+    int left = 2 * i + 1; // Left = 2*i + 1
+    int right = 2 * i + 2; // Right = 2*i + 2
 
-void heapify(vector<int>& v, int n, int i){
-    int largest = i;
-    int l = left(i);
-    int r = right(i);
+    // If left child is larger than root
+    if (left < n && v[left] > v[largest])
+        largest = left;
 
-    if (l < n && v[l] > v[largest]){ largest = l; }
-    if (r < n && v[r] > v[largest]){ largest = r; }
+    // If right child is larger than largest so far
+    if (right < n && v[right] > v[largest])
+        largest = right;
 
-    if(largest != i){
-        swap(v[i], v[largest]);
+    // If largest is not root
+    if (largest != i) {
+        swap(v, i, largest);
+
+        // Recursively heapify the affected sub-tree
         heapify(v, n, largest);
     }
 }
 
-void create_heap(vector<int>& v){
+
+// Main function of Heapsort
+void heap_sort(vector<int>& v, bool show_list_state) {
     int n = v.size();
-    for (int i = n/2 - 1; i >= 0; i--){
+
+    // Transforms the vector into a maximum heap
+    for (int i = n / 2 - 1; i >= 0; i--)
         heapify(v, n, i);
-    }
-}
 
-void heap_sort(vector<int>& v, bool show_list_state){
-    int n = v.size();
-    if (show_list_state) {
-        cout << "Current state before heap: ";
-        print_vector(v);
-    }
-    create_heap(v);
-    if (show_list_state) {
-        cout << "Current state after heap: ";
-        print_vector(v);
-    }
+    // Extracts the elements from the heap one by one
+    for (int i = n - 1; i >= 0; i--) {
+        // Moves the root (largest element) to the end
+        swap(v, 0, i);
 
-    for (int i = n - 1; i >= 0; i--){
-        swap(v[0], v[i]);
+        // Transforms the vector into a maximum heap again, excluding the last element
         heapify(v, i, 0);
+
+        // Shows the state of the list after each iteration
         if (show_list_state) {
             cout << "Current state: ";
             print_vector(v);
@@ -110,7 +126,7 @@ void heap_sort(vector<int>& v, bool show_list_state){
 }
 
 
-/*void heap_sort_donut(vector<int>& v){
+/*void heap_sort(vector<int>& v){
     // Originally Code by Andy Sloane https://www.a1k0n.net/2011/07/20/donut-math.html
     float A = 0, B = 0, i, j, z[1760];
     char b[1760];
@@ -148,10 +164,21 @@ void heap_sort(vector<int>& v, bool show_list_state){
 }*/
 
 
-void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state){    
+/*-----------*/
+//  WRAPPER  //
+/*-----------*/
+
+// Wrapper function for the sorting algorithms
+void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state, bool stress_mode){    
     if(algorithm == "Merge Sort"){
         merge_sort(v, left, right, show_list_state);
     }else if(algorithm == "Heap Sort"){
         heap_sort(v, show_list_state);
+    }
+
+    // Prints the sorted vector
+    if (!stress_mode) {
+        cout << "Sorted vector: ";
+        print_vector(v);
     }
 }
