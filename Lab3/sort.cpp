@@ -10,9 +10,13 @@
 #include <unistd.h>
 #include <ncurses.h>*/
 
-
 using namespace std;
 
+
+void print_vector(vector<int>& v){
+    for (int i = 0; i < v.size(); i++) { cout << v[i] << " "; }
+    cout << endl;
+}
 
 void merge_aux(vector<int>& v, int left, int mid, int right, bool show_list_state){
     // Create a temporary vector to store the sorted elements
@@ -41,10 +45,7 @@ void merge_aux(vector<int>& v, int left, int mid, int right, bool show_list_stat
 
     if (show_list_state) {
         cout << "Current state: ";
-        for (int i = 0; i < v.size(); i++) {
-            cout << v[i] << " ";
-        }
-        cout << endl;
+        print_vector(v);
     }
 }
 
@@ -58,58 +59,58 @@ void merge_sort(vector<int>& v, int left, int right, bool show_list_state){
     }
 }
 
-
 // heap_sort
-//int parent(int i){ return (i/2); }
-int left(int i)  { return (2*i); }
-int right(int i) { return (2*i + 1); }
+int parent(int i){ return (i-1)/2; }
 
-void heapify(vector<int>& v, int i){
-    int l = left(i) ;   // left child index
-    int r = right(i);   // right child index
-    int g;  // index of the greatest element
+int left(int i){ return (2*i + 1); }
 
-    // Find the greatest element between the parent and its children
-    if ((l < v.size()) && v[l] > v[i]){ g = l; }
-    else{ g = i; }  // If the parent is the greatest, then we are done
+int right(int i){ return (2*i + 2); }
 
-    // If the right child is the greatest, then update the index
-    if ((r <= v.size()) && v[r] > v[g]){ g = r; }
+void heapify(vector<int>& v, int n, int i){
+    int largest = i;
+    int l = left(i);
+    int r = right(i);
 
-    // If the greatest element is not the parent, then swap them and heapify the new parent
-    if(g != i){
-        swap(v[i], v[g]);
-        heapify(v, g);
+    if (l < n && v[l] > v[largest]){ largest = l; }
+    if (r < n && v[r] > v[largest]){ largest = r; }
+
+    if(largest != i){
+        swap(v[i], v[largest]);
+        heapify(v, n, largest);
+    }
+}
+
+void create_heap(vector<int>& v){
+    int n = v.size();
+    for (int i = n/2 - 1; i >= 0; i--){
+        heapify(v, n, i);
+    }
+}
+
+void heap_sort(vector<int>& v, bool show_list_state){
+    int n = v.size();
+    if (show_list_state) {
+        cout << "Current state before heap: ";
+        print_vector(v);
+    }
+    create_heap(v);
+    if (show_list_state) {
+        cout << "Current state after heap: ";
+        print_vector(v);
+    }
+
+    for (int i = n - 1; i >= 0; i--){
+        swap(v[0], v[i]);
+        heapify(v, i, 0);
+        if (show_list_state) {
+            cout << "Current state: ";
+            print_vector(v);
+        }
     }
 }
 
 
-void create_heap(vector<int>& v){
-    int m = (v.size() - 1)/2;  // Index of the last parent
-    for (int i = m; i > 0; i--){ heapify(v, i); }  // Heapify all parents
-}
-
-
-void heap_sort(vector<int>& v, bool show_list_state){
-    create_heap(v);
-    int f = v.size() - 1;  // Index of the last element
-    
-    // Swap the first and last elements, heapify the new root, and repeat
-    for (int i = f; i >= 0; i--){
-        swap(v[1], v[i]);
-        heapify(v, 1);
-        if (show_list_state) {
-            cout << "Current state: ";
-            for (int i = 0; i < v.size(); i++) {
-                cout << v[i] << " ";
-            }
-            cout << endl;
-        }
-    }   
-}
-
-
-/*void heap_sort(vector<int>& v){
+/*void heap_sort_donut(vector<int>& v){
     // Originally Code by Andy Sloane https://www.a1k0n.net/2011/07/20/donut-math.html
     float A = 0, B = 0, i, j, z[1760];
     char b[1760];
@@ -147,19 +148,10 @@ void heap_sort(vector<int>& v, bool show_list_state){
 }*/
 
 
-void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state, bool stress_mode){    
+void sort_wrapper(vector<int>& v, string algorithm, int left, int right, bool show_list_state){    
     if(algorithm == "Merge Sort"){
         merge_sort(v, left, right, show_list_state);
     }else if(algorithm == "Heap Sort"){
         heap_sort(v, show_list_state);
-    }
-
-    // Print the sorted list
-    if (!stress_mode){
-        cout << "Sorted list: ";
-        for (int i = 0; i < v.size(); i++) {
-            cout << v[i] << " ";
-        }
-        cout << endl;
     }
 }
