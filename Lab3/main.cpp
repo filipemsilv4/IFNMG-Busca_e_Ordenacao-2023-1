@@ -9,7 +9,6 @@
 #include <utility>
 #include <map>
 
-
 using namespace std;
 
 map<string, int> waitForWindowWidth(int min_width);
@@ -17,17 +16,11 @@ void display_options(vector<pair<string, bool>> &options, int max_option_length,
 void stressMode(bool show_state, string algorithm);
 void get_list(string chosen_algorithm, vector<pair<string, bool>> &options);
 
-
-int main(int argc, char **argv) {
-    // if -TUI_stresses_me is passed as an argument, ignore TUI and run stress mode
-    if (argc >= 3 && string(argv[1]) == "-TUI_stresses_me") {
-        if (string(argv[2]) == "merge_sort"){
-            stressMode(false, "Merge Sort");
-        } else if (string(argv[2]) == "heap_sort"){
-            stressMode(false, "Heap Sort");
-        } else {
-            cout << "Invalid algorithm name" << endl;
-        }
+// Example: ./main -no_TUI -merge_sort
+int main(int argc, char **argv){
+    // if -no_TUI is passed as an argument, ignore TUI and run stress mode
+    if (argc >= 2 && string(argv[1]) == "-no_TUI") {
+        stressMode(false, string(argv[2]));
         return 0;
     }
 
@@ -379,6 +372,13 @@ void stressMode(bool show_state, string algorithm) {
     // Generate 1000 random lists, each with a random number of random elements
     // Print the average time it took to sort all the lists
 
+    if (algorithm == "-merge_sort"){ algorithm = "Merge Sort"; }
+    else if (algorithm == "-heap_sort"){ algorithm = "Heap Sort"; }
+    else {
+        cout << "Invalid algorithm" << endl;
+        return;
+    }
+
     cout << "Number of elements,Time taken by the sorting function" << endl;
 
     auto startAll = chrono::high_resolution_clock::now();
@@ -417,8 +417,8 @@ void stressMode(bool show_state, string algorithm) {
     // Total time: 0.0000000
     auto durationAll =
         chrono::duration_cast<chrono::microseconds>(endAll - startAll);
-    cout << "Total time  : " << durationAll.count() << " microseconds" << endl
-         << endl;
+    cout << "Total time  : " << durationAll.count() << " microseconds" << endl << endl;
+
 }
 
 
