@@ -111,17 +111,17 @@ void heap_sort(vector<int>& v, bool show_list_state) {
 
     // Extracts the elements from the heap one by one
     for (int i = n - 1; i >= 0; i--) {
+        // Shows the state of the list after each iteration
+        if (show_list_state) {
+            cout << "Current state: ";
+            print_vector(v);
+        }
         // Moves the root (largest element) to the end
         swap(v, 0, i);
 
         // Transforms the vector into a maximum heap again, excluding the last element
         heapify(v, i, 0);
 
-        // Shows the state of the list after each iteration
-        if (show_list_state) {
-            cout << "Current state: ";
-            print_vector(v);
-        }
     }
 }
 
