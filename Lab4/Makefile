@@ -3,7 +3,7 @@ CXX=g++
 CXXFLAGS=-std=c++11
 
 # Source files
-SRCS=main.cpp kmp.cpp
+SRCS=main.cpp
 
 # Object files
 OBJS=$(SRCS:.cpp=.o)
