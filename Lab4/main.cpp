@@ -103,7 +103,7 @@ void print_text_with_highlights(string text, vector<int> positions, int pattern_
         // if the current index is in the positions vector, we highlight the character
         if (i >= positions[positions_pos] && i < positions[positions_pos] + pattern_size){
             cout << "\033[1;31m" << text[i] << "\033[0m";
-            if (i == positions[positions_pos] + pattern_size - 1){
+            if (i == positions[positions_pos] + pattern_size){
                 positions_pos++;
             }
         }
