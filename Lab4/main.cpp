@@ -21,8 +21,6 @@ int main(void){
 
     vector<int> positions = kmp(text, pattern);
 
-    print_text_with_highlights(text, positions, pattern.length());
-
     // Just a nice way to print the positions
     if (positions.size() == 0){
         cout << "The pattern does not occur in the text." << endl;
@@ -94,22 +92,6 @@ vector<int> kmp(string text, string pattern){
     }
     delete [] lps;
     return positions;
-}
-
-
-void print_text_with_highlights(string text, vector<int> positions, int pattern_size){
-    int positions_pos = 0;
-    for (int i = 0; i < text.length(); i++){
-        // if the current index is in the positions vector, we highlight the character
-        if (i >= positions[positions_pos] && i < positions[positions_pos] + pattern_size){
-            cout << "\033[1;31m" << text[i] << "\033[0m";
-            if (i == positions[positions_pos] + pattern_size - 1){
-                positions_pos++;
-            }
-        }
-        else{ cout << text[i]; }
-    }
-    cout << endl;
 }
 
 
