@@ -42,11 +42,11 @@ int main(void){
 
 // This function computes the longest prefix suffix array for the pattern
 int* computeLPS(string pattern){
-    int m = pattern.length();
-    int *lps = new int[m];
+    int pattern_lenght = pattern.length();
+    int *lps = new int[pattern_lenght];
     lps[0] = 0;
     int i = 1; int j = 0;  // i is the index of the suffix and j is the index of the prefix
-    while(i < m){  // we start from the second character of the pattern
+    while(i < pattern_lenght){
         if(pattern[i] == pattern[j]){  // if the characters match, we increment both i and j
             j++;
             lps[i] = j;  // the value of lps[i] is the length of the longest prefix that is also a suffix of the substring pattern[0..i]
@@ -62,6 +62,7 @@ int* computeLPS(string pattern){
             }
         }
     }
+
     return lps;
 }
 
@@ -69,19 +70,19 @@ int* computeLPS(string pattern){
 // This function returns the positions of the occurences of the pattern in the text
 vector<int> kmp(string text, string pattern){
     vector<int> positions;
-    int n = text.length();
-    int m = pattern.length();
+    int text_lenght = text.length();
+    int pattern_lenght = pattern.length();
     int i = 0; int j = 0;  // i is the index of text and j is the index of pattern
     int *lps = computeLPS(pattern);
-    while(i < n){
+    while(i < text_lenght){
         if(text[i] == pattern[j]){  // if the characters match, increment both i and j
             i++; j++;
         }
-        if(j == m){  // if j reaches the end of the pattern, we have found a match
+        if(j == pattern_lenght){  // if j reaches the end of the pattern, we have found a match
             positions.push_back(i-j);
             j = lps[j-1];
         }
-        else if(i < n && text[i] != pattern[j]){  // if the characters don't match, we need to move j back to the last matching character
+        else if(i < text_lenght && text[i] != pattern[j]){  // if the characters don't match, we need to move j back to the last matching character
             if(j != 0){  // if j is not at the beginning of the pattern, we move it back to the last matching character
                 j = lps[j-1];
             }
